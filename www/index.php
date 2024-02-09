@@ -1,27 +1,32 @@
 <?php
 
-// Penser à mettre un index.php dans www qui redirige vers cet index là !
+// Penser à mettre un validate.php dans www qui redirige vers cet index là !
 include('../config/AppConfig.php');
 include('../config/DbConfig.php');
 include('../kernel/Connexion.php');
 include ('../kernel/date_time.php');
 
 //controleurs
-include('../controle/connexionControle.php');
-include('../controle/accueilControle.php');
+include('../control/connexionControl.php');
+include('../control/homeControl.php');
+include('../control/dayOffControl.php');
+include('../control/userControl.php');
 
 
 //data
 include ('../data/userData.php');
+include('../data/dayOffData.php');
+include ('../data/reasonData.php');
+include ('../data/statusData.php');
 
 session_start();
 
 // Vérifier les paramètres du GET
 
-$controle='';
-if (isset($_GET['controle']))
+$control='';
+if (isset($_GET['control']))
 {
-    $controle=$_GET['controle'];
+    $control=$_GET['control'];
 }
 	
 $action='';
@@ -31,19 +36,33 @@ if (isset($_GET['action']))
 }
 
 /*
- * L'action demandée est envoyée vers le controle associé à la page demandée
+ * L'action demandée est envoyée vers le control associé à la page demandée
  * Cette action est orientée métier : ce que souhaite le client comme fonctionalités, indépendament de la notion de tables!
  */
-switch ($controle) {
-	case 'accueil' :
-        if (null == connexionControle_userConnecte()) {
-            connexionControle('');
+switch ($control) {
+	case 'home' :
+        if (null == connexionControl_userConnecte()) {
+            connexionControl('');
         }else{
-            accueilControle($action);
+            homeControl($action);
         }
 	break;
+    case 'dayOff' :
+        if (null == connexionControl_userConnecte()) {
+            connexionControl('');
+        }else{
+            dayOffControl($action);
+        }
+        break;
+    case 'user' :
+        if (null == connexionControl_userConnecte()) {
+            connexionControl('');
+        }else{
+            userControl($action);
+        }
+        break;
 	default : // A défaut par sécurité, c'est direct retour à l'authentification
-		connexionControle($action);
+		connexionControl($action);
 	break;
 }
 

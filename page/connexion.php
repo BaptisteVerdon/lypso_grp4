@@ -5,7 +5,7 @@
     <header><?php echo $titrePage; ?></header>
     <form method="POST" action="index.php?action=connecter">
         <label for="email" >Adresse email</label>
-        <input type="email" id="email" name="email" placeholder="Votre adresse mail" value="test@test.com">
+        <input type="email" id="email" name="email" placeholder="Votre adresse mail" value="baptiste@test.com">
         <label for="mdp" >Mot de passe</label>
         <input type="password" id="mdp" name="mdp" placeholder="Votre mot de passe" value="123456">
         <input type="submit" value="Connexion">
