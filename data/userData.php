@@ -13,65 +13,20 @@ function userData_getFromEmail(string $email) :?array
     }
 }
 
-function userData_getAll():?array{
-
-    $requete='SELECT * FROM user ORDER BY id';
-
-    // Execute la requete sur la base m2l grâce à la méthode query() prévu dans la classe Connexion
-    return $liste=Connexion::query($requete);
-
-
-}
-
-function userData_insert($email,$password,$role, $ligue_id):?array
+function userData_getNameRoleFromId()
 {
-    $requete='INSERT INTO user(email,password,role,ligue_id)
-        VALUES (:email,:password,:role,:ligue_id)';
-    return Connexion::query($requete,['email'=>$email,'password'=>$password, 'role'=>$role, 'ligue_id'=>$ligue_id]);
+    $requete = 'SELECT role.name FROM user JOIN role ON user.role_id = role.id WHERE user.id =:user_id';
+
+    $liste = Connexion::query($requete,['user_id'=> $_SESSION['user']['id']]);
+
+    return $liste[0]['name'];
 }
 
-function userData_find($id):?array
+function userData_getNameDepartementFromId()
 {
-    #1
-    // $liste : liste mixte (classique + associative) de type [numéro de la ligne]['champ de la table']
-    // $requete  : string
-    #2
-    // Mettre la requête dans une variable : aide au debug
-    $requete='SELECT * FROM user WHERE id=:id';
+    $requete = 'SELECT departement.name FROM user JOIN departement ON user.departement_id = departement.id WHERE user.id =:user_id';
 
-    // Execute la requete sur la base m2l grâce à la méthode query() prévu dans la classe Connexion
-    $liste=Connexion::query($requete,['id'=>$id]);
+    $liste = Connexion::query($requete,['user_id'=> $_SESSION['user']['id']]);
 
-    #3
-    if(isset($liste[0])){
-        return $liste[0];
-    }else{
-        return null;
-    }
-}
-
-function userData_update($user_id,$email,$password,$role, $ligue_id):array{
-
-    $requete = 'UPDATE user
-        SET email=:email, password=:password, role=:role, ligue_id=:ligue_id
-        WHERE id=:id';
-
-    return Connexion::query($requete,['id'=>$user_id,'email'=>$email,'password'=>$password,'role'=>$role, 'ligue_id'=>$ligue_id]);
-
-}
-
-
-function userData_getRoles():?array{
-
-    // Execute la requete sur la base m2l grâce à la méthode query() prévu dans la classe Connexion
-    return ['Administrateur','Ligue'];
-
-
-}
-function userData_delete($user_id):bool{
-
-    $requete='DELETE FROM user WHERE id=:id';
-
-    // Execute la requete sur la base m2l grâce à la méthode query() prévu dans la classe Connexion
-    return Connexion::exec($requete,['id'=>$user_id]);
+    return $liste[0]['name'];
 }
