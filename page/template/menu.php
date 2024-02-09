@@ -1,6 +1,6 @@
 <body id="main-page">
 <header>
-    <a href=".?controle=accueil"><img src="../logo/logo_Lypso.png" alt="Logo Lypso" class="logo"></a>
+    <a href=".?controle=accueil"><img src="../logo/logoLypso.png" alt="Logo Lypso" class="logo"></a>
     <nav>
         <ul>
         </ul>
