@@ -82,7 +82,7 @@ input[type=submit]:hover {
 #main-page header {
 	display :flex;
 	color: white;
-	background-color: #646464;
+	background-color: #06103f;
 	padding-left: 10px;
 	padding-top: 0;
 	padding-bottom: 0;
@@ -113,7 +113,7 @@ input[type=submit]:hover {
 }
 
 #main-page header nav ul li a {
-	color: #868e96;
+	color: #ffffff;
     padding: 14px 16px;
     text-decoration: none;
 }
@@ -128,7 +128,7 @@ input[type=submit]:hover {
 /* Style the navigation menu */
 #main-page section nav {
     padding: 0;
-    background-color: #646464;
+    background-color: #06103f;
     height: calc(100vh - 100px);
 }
 
@@ -229,5 +229,8 @@ table.table-bordered{
 }
 
 .logo{
-	width: 20%;
+	width: 60px;
+	height: 60px;
+	margin-left: 0px;
+	margin-right: -25px;
 }
