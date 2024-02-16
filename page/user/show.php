@@ -5,8 +5,9 @@ include('../page/template/menu.php');
     <article>
         <header><?php echo $titrePage;?></header>
         <br>
-        Prénom : <?= $_SESSION['user']['lastname']?> <br>
-        Nom : <?= $_SESSION['user']['firstname']?> <br>
+        Prénom : <?= $_SESSION['user']['firstname']?> <br>
+        Nom : <?= $_SESSION['user']['lastname']?> <br>
+
         Email : <?= $_SESSION['user']['email']?> <br>
         Département : <?= userData_getNameDepartementFromId()?> <br>
         <?php

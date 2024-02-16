@@ -9,8 +9,9 @@ function dayOffControl($action) {
         case 'store' :
             dayOffControl_storeAction();
             break;
-        case 'index' :
-            dayOffControl_indexAction($_GET['user_id']);
+
+        case 'employeeIndex' :
+            dayOffControl_employeeIndexAction($_GET['user_id']);
             break;
         case 'show' :
             dayOffControl_showAction($_GET['dayOff_id']);
@@ -30,10 +31,12 @@ function dayOffControl($action) {
         case 'askDelete':
             dayOffControl_askDeleteAction($_GET['dayOff_id']);
             break;
-        default :
+        case 'validate':
+            dayOffControl_isValidateAction();
+            break;
+            default :
             connexionControl_formAction();
             break;
-
     }
 }
 
@@ -44,6 +47,7 @@ function dayOffControl_createAction(){
     $reasons = reasonData_getAll();
     require '../page/dayOff/create.php';
 }
+
 function dayOffControl_editAction($dayOff_id)
 {
     $titreOnglet="Lypso - Modifier";
@@ -65,6 +69,7 @@ function dayOffControl_updateAction($dayOff_id)
 
     header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
 }
+
 
 function dayOffControl_storeAction(){
 
@@ -96,7 +101,8 @@ function dayOffControl_deleteAction($dayOff_id){
 
 }
 
-function dayOffControl_indexAction($user_id){
+
+function dayOffControl_employeeIndexAction($user_id){
     $titreOnglet="Lypso - Congés";
     $titrePage = "Congés : Tous";
     $status = statusData_getAll();
@@ -113,7 +119,7 @@ function dayOffControl_indexAction($user_id){
         $daysOff = dayOffData_getAllFromUserId($user_id);
     }
 
-    require ('../page/dayOff/index.php');
+    require ('../page/dayOff/employeeIndex.php');
 }
 
 function dayOffControl_deleteConfirmAction($dayOff_id){
@@ -129,4 +135,25 @@ function dayOffControl_askDeleteAction($dayOff_id){
     dayOffData_updateStatusAskDelete($dayOff_id);
     $daysOff = daysOffData_getValidateFromUserId();
     require('../page/home.php');
+}
+
+function dayOffControl_isValidateAction(){
+    $start = $_POST['start'];
+    $end = $_POST['end'];
+    if ($end > $start and $start != '' and $end != ''){
+        $titreOnglet="Lypso - Valider";
+        $titrePage="Valider un congé";
+        $temp = 0;
+        $reason_id = $_POST['reason_id'];
+        $reason = reasonData_getFromId($reason_id);
+    }else{
+        $titreOnglet="Lypso - Prendre";
+        $titrePage="Prendre un congé";
+        $start = '';
+        $end = '';
+        $reasons = reasonData_getAll();
+    }
+
+
+    require('../page/dayOff/create.php');
 }
