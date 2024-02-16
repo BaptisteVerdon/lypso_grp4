@@ -9,6 +9,7 @@ function dayOffControl($action) {
         case 'store' :
             dayOffControl_storeAction();
             break;
+
         case 'employeeIndex' :
             dayOffControl_employeeIndexAction($_GET['user_id']);
             break;
@@ -20,6 +21,12 @@ function dayOffControl($action) {
             break;
         case 'deleteConfirm':
             dayOffControl_deleteConfirmAction($_GET['dayOff_id']);
+            break;
+        case 'edit':
+            dayOffControl_editAction($_GET['dayOff_id']);
+            break;
+        case 'update':
+            dayOffControl_updateAction($_GET['dayOff_id']);
             break;
         case 'askDelete':
             dayOffControl_askDeleteAction($_GET['dayOff_id']);
@@ -40,6 +47,29 @@ function dayOffControl_createAction(){
     $reasons = reasonData_getAll();
     require '../page/dayOff/create.php';
 }
+
+function dayOffControl_editAction($dayOff_id)
+{
+    $titreOnglet="Lypso - Modifier";
+    $titrePage="Modifier le congé";
+    $reasons = reasonData_getAll();
+    $dayOff = dayOffData_find($dayOff_id);
+    require '../page/dayOff/edit.php';
+}
+
+function dayOffControl_updateAction($dayOff_id)
+{
+    $dayOff = dayOffData_find($dayOff_id);
+    $start = $_POST['start'];
+    $end = $_POST['end'];
+    $reasons = $_POST['reason_id'];
+    $user_id = $_SESSION['user']['id'];
+
+    dayOffData_update($dayOff_id, $start, $end, $reasons, $user_id);
+
+    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
+}
+
 
 function dayOffControl_storeAction(){
 
@@ -70,6 +100,7 @@ function dayOffControl_deleteAction($dayOff_id){
     header('Location:.?control=home');
 
 }
+
 
 function dayOffControl_employeeIndexAction($user_id){
     $titreOnglet="Lypso - Congés";

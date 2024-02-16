@@ -41,6 +41,7 @@ if (isset($_GET['action']))
  */
 switch ($control) {
 	case 'home' :
+
         if (null == connexionControl_userConnect()) {
             connexionControl('');
         }else{

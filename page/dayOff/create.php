@@ -19,9 +19,11 @@ include('../page/template/menu.php');
         <?php
             echo 'Raison : ';
             echo '<select name="reason_id">';
+
             if (isset($temp)){
                 echo '<option value="' . $reason['id'] . '"selected>' . $reason['name'] . '</option>';
             }
+
             foreach ($reasons as $reason){
                 echo '<option value="' . $reason['id'] . '">' . $reason['name'] . '</option>';
             }

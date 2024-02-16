@@ -105,3 +105,13 @@ function dayOffData_countAll($user_id){
 
     return $liste[0]['COUNT(*)'];
 }
+
+function dayOffData_update($dayOff,$start,$end,$reasons,$user_id):array
+{
+    $requete = 'UPDATE dayOff
+        SET start=:start, end=:end,reason_id=:reasons,user_id=:user_id
+        WHERE id=:id';
+    Connexion::exec($requete,['id'=>$dayOff,'start'=>$start,'end'=>$end,'reasons'=>$reasons,'user_id'=>$user_id]);
+    return dayOffData_find($dayOff);
+
+}

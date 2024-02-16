@@ -7,6 +7,7 @@ include('../page/template/menu.php');
         <br>
         Prénom : <?= $_SESSION['user']['firstname']?> <br>
         Nom : <?= $_SESSION['user']['lastname']?> <br>
+
         Email : <?= $_SESSION['user']['email']?> <br>
         Département : <?= userData_getNameDepartementFromId()?> <br>
         <?php
