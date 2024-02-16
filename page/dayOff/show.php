@@ -12,8 +12,9 @@ include('../page/template/menu.php');
         <br>
         <hr>
         <br>
-        <button style="background-color: #37c210" onclick="window.location.href = '.?control=dayOff&action=index&user_id=<?= $_SESSION['user']['id']?>'">Valider</button>
-        <button style="background-color: gray" onclick="window.location.href = '.?control=dayOff&action=delete&dayOff_id=<?= $dayOff['id']?>'">Annuler</button>
+        <button style="background-color: #37c210" onclick="window.location.href = '.?control=home'">Accueil</button>
+        <button style="background-color: gray" onclick="window.location.href = '.?control=dayOff&action=delete&dayOff_id=<?= $dayOff['id']?>'">Modifier</button>
+<!--        TODO changer le lien pour la modif quans fonctionnalité sera prête-->
     </article>
 <?php
 include ('../page/template/footer.php');
