@@ -1,6 +1,7 @@
 <?php
 include('../page/template/head.php');
 include('../page/template/menu.php');
+
 ?>
 <article>
     <form method="POST" action=".?control=dayOff&action=store">
