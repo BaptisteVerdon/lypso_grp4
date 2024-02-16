@@ -41,21 +41,21 @@ if (isset($_GET['action']))
  */
 switch ($control) {
 	case 'home' :
-        if (null == connexionControl_userConnecte()) {
+        if (null == connexionControl_userConnect()) {
             connexionControl('');
         }else{
             homeControl($action);
         }
 	break;
     case 'dayOff' :
-        if (null == connexionControl_userConnecte()) {
+        if (null == connexionControl_userConnect()) {
             connexionControl('');
         }else{
             dayOffControl($action);
         }
         break;
     case 'user' :
-        if (null == connexionControl_userConnecte()) {
+        if (null == connexionControl_userConnect()) {
             connexionControl('');
         }else{
             userControl($action);

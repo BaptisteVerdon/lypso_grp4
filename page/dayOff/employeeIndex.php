@@ -5,7 +5,7 @@ include('../page/template/menu.php');
 <article>
     <header><?php echo $titrePage;?> </header><br>
 
-    <form method="POST" action=".?control=dayOff&action=index&user_id=<?= $user_id ?>">
+    <form method="POST" action=".?control=dayOff&action=employeeIndex&user_id=<?= $user_id ?>">
         <label>
             Veuillez sélectionner un statut de congé :
         </label>

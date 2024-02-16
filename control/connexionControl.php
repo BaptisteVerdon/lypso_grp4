@@ -43,7 +43,7 @@ function connexionControl_disconnectAction()
     connexionControl_formAction();
 }
 
-function connexionControl_userConnecte() :?array
+function connexionControl_userConnect() :?array
 {
     return $_SESSION['user'];
 }
