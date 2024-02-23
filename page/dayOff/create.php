@@ -7,7 +7,7 @@ include('../page/template/menu.php');
     if(isset($temp)){
         echo '<form method="POST" action=".?control=dayOff&action=store">';
     }else{
-        echo '<form method="POST" action=".?control=dayOff&action=validate">';
+        echo '<form method="POST" action=".?control=dayOff&action=createIsValidate">';
     }
     ?>
         <header><?php echo $titrePage;?></header>

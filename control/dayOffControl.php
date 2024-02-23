@@ -31,8 +31,11 @@ function dayOffControl($action) {
         case 'askDelete':
             dayOffControl_askDeleteAction($_GET['dayOff_id']);
             break;
-        case 'validate':
-            dayOffControl_isValidateAction();
+        case 'createIsValidate':
+            dayOffControl_createIsValidateAction();
+            break;
+        case 'editIsValidate':
+            dayOffControl_editIsValidateAction($_GET['dayOff_id']);
             break;
             default :
             connexionControl_formAction();
@@ -62,10 +65,10 @@ function dayOffControl_updateAction($dayOff_id)
     $dayOff = dayOffData_find($dayOff_id);
     $start = $_POST['start'];
     $end = $_POST['end'];
-    $reasons = $_POST['reason_id'];
+    $reason_id = $_POST['reason_id'];
     $user_id = $_SESSION['user']['id'];
 
-    dayOffData_update($dayOff_id, $start, $end, $reasons, $user_id);
+    dayOffData_update($dayOff_id, $start, $end, $reason_id, $user_id);
 
     header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
 }
@@ -137,7 +140,7 @@ function dayOffControl_askDeleteAction($dayOff_id){
     require('../page/home.php');
 }
 
-function dayOffControl_isValidateAction(){
+function dayOffControl_createIsValidateAction(){
     $start = $_POST['start'];
     $end = $_POST['end'];
     if ($end > $start and $start != '' and $end != ''){
@@ -156,4 +159,26 @@ function dayOffControl_isValidateAction(){
 
 
     require('../page/dayOff/create.php');
+}
+
+function dayOffControl_editIsValidateAction($dayOff_id){
+    $start = $_POST['start'];
+    $end = $_POST['end'];
+    $reason_id = $_POST['reason_id'];
+    if ($end > $start and $start != '' and $end != ''){
+        $titreOnglet="Lypso - Valider modification";
+        $titrePage="Valider la modification";
+        $temp = 0;
+        $reason = reasonData_getFromId($reason_id);
+    }else
+    {
+        $dayOff = dayOffData_find($dayOff_id);
+        $titreOnglet="Lypso - Prendre";
+        $titrePage="Prendre un congé";
+        $start = $_POST['start'];
+        $end = $_POST['end'];
+        $reason_id = $_POST['reason_id'];
+        $reasons = reasonData_getAll();
+    }
+    require('../page/dayOff/edit.php');
 }
