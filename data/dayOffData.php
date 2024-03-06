@@ -33,7 +33,7 @@ function dayOffData_insert($start,$end,$reason_id,$user_id):?array
     }
 }
 
-function dayOffData_find($dayOff_id)
+function dayOffData_getFromId($dayOff_id)
 {
     $requete = 'SELECT * FROM dayOff WHERE id=:dayOff_id';
 
@@ -106,12 +106,49 @@ function dayOffData_countAll($user_id){
     return $liste[0]['COUNT(*)'];
 }
 
-function dayOffData_update($dayOff,$start,$end,$reasons,$user_id):array
+function dayOffData_update($dayOff_id,$start,$end,$reasons,$user_id):array
 {
     $requete = 'UPDATE dayOff
         SET start=:start, end=:end,reason_id=:reasons,user_id=:user_id
         WHERE id=:id';
-    Connexion::exec($requete,['id'=>$dayOff,'start'=>$start,'end'=>$end,'reasons'=>$reasons,'user_id'=>$user_id]);
-    return dayOffData_find($dayOff);
+    Connexion::exec($requete,['id'=>$dayOff_id,'start'=>$start,'end'=>$end,'reasons'=>$reasons,'user_id'=>$user_id]);
+    return dayOffData_getFromId($dayOff_id);
 
+}
+
+function dayOffData_updateStatus($dayOff_id,$status_id):array
+{
+    $requete = 'UPDATE dayOff
+        SET status_id=:status_id
+        WHERE id=:id';
+    Connexion::exec($requete,['id'=>$dayOff_id,'status_id'=>$status_id]);
+    return dayOffData_getFromId($dayOff_id);
+
+}
+
+function dayOffData_getAll()
+{
+    $requete = 'SELECT * FROM dayOff';
+    $liste = Connexion::query($requete);
+    return $liste;
+}
+
+function daysOffData_getValidateFromUserDepartementId(){
+//    $requete = 'SELECT * FROM dayOff
+//                JOIN user ON dayOff.user_id = user.id
+//                WHERE status_id=:status_id
+//                AND user.departement_id=:departement_id';
+//
+//    $liste = Connexion::query($requete,['status_id'=>$status_id, 'departement_id'=>$departement_id]);
+//    var_dump($liste); exit;
+
+    $requete = 'SELECT *
+                FROM dayOff
+                JOIN user ON dayOff.user_id = user.id
+                WHERE user.departement_id=:departement_id
+                AND status_id = 1
+                AND NOW() < start ORDER BY start;';
+
+    $liste = Connexion::query($requete,['departement_id'=> $_SESSION['user']['departement_id']]);
+    return $liste;
 }
