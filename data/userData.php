@@ -30,3 +30,25 @@ function userData_getNameDepartementFromId()
 
     return $liste[0]['name'];
 }
+
+function userData_getIdDepartementFromId($id)
+{
+    $requete = 'SELECT departement_id FROM user WHERE user.id =:id';
+
+    $liste = Connexion::query($requete,['id'=> $id]);
+
+    return $liste;
+}
+
+function userData_getAllFromId($user_id)
+{
+    $requete = 'SELECT * FROM user WHERE id =:id';
+
+    $liste = Connexion::query($requete,['id'=> $user_id]);
+
+    if(isset($liste[0])){
+        return $liste[0];
+    }else{
+        return null;
+    }
+}

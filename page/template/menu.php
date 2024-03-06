@@ -19,7 +19,7 @@
                     echo '<li><a href="../www/index.php?control=dayOff&action=create">Prendre congés</a></li>';
                     echo '<li><a href="../www/index.php?control=user&action=board&user_id='.$_SESSION['user']['id'].'">Tableau de bord</a></li>';
                 }elseif (userData_getNameRoleFromId() == 'manager'){
-                    echo '<li><a href="../www/index.php?control=dayOff&action=index&user_id='.$_SESSION['user']['id'].'">Manage</a></li>';
+                    echo '<li><a href="../www/index.php?control=dayOff&action=managerIndex&user_id='.$_SESSION['user']['id'].'">Manage</a></li>';
 
                 }
             ?>
