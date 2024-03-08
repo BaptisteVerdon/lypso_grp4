@@ -1,6 +1,3 @@
-<?php if($daysOff == 'null'){
-    echo 'test';
-}?>
 <table class="table table-bordered">
     <thead>
     <tr>
