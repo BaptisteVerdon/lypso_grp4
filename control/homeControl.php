@@ -18,6 +18,8 @@ function homeControl_defaultAction() {
     }
     if (userData_getNameRoleFromId() == 'manager'){
         $daysOff = daysOffData_getValidateFromUserDepartementId();
+    }else{
+        $daysOff = [];
     }
 	require '../page/home.php';
 }
