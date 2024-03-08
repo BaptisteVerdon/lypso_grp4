@@ -52,3 +52,20 @@ function userData_getAllFromId($user_id)
         return null;
     }
 }
+
+function userData_getAllFromDepartementId($departement_id)
+{
+    $requete = 'SELECT * FROM user WHERE departement_id =:departement_id';
+
+    $liste = Connexion::query($requete,['departement_id'=> $departement_id]);
+    return $liste;
+}
+
+function userData_getNamesFromId($user_id)
+{
+    $requete = 'SELECT lastname, firstname FROM user WHERE user.id =:user_id';
+
+    $liste = Connexion::query($requete,['user_id'=> $user_id]);
+
+    return $liste[0];
+}
