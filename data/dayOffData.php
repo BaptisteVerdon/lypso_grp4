@@ -1,13 +1,19 @@
 <?php
 
 function dayOffData_getFromStatusIdAndFromUserId($status_id,$user_id){
-    $requete = 'SELECT * FROM dayOff WHERE status_id=:status_id AND user_id=:user_id';
+    $requete = 'SELECT * FROM dayOff WHERE status_id=:status_id AND user_id=:user_id ORDER BY start';
 
     return $liste = Connexion::query($requete,['status_id'=>$status_id,'user_id'=>$user_id]);
 }
-function daysOffData_getValidateFromUserId()
+function daysOffData_getValidateFromUserIdThisMonth()
 {
-    $requete = 'SELECT dayOff.id, dayOff.start, dayOff.end, dayOff.reason_id, dayOff.status_id FROM dayOff JOIN user ON dayOff.user_id = user.id WHERE user_id =:user_id AND status_id = 1 AND NOW() < start ORDER BY start;';
+    $requete = 'SELECT dayOff.id, dayOff.start, dayOff.end, dayOff.user_id,dayOff.reason_id, dayOff.status_id 
+                FROM dayOff 
+                JOIN user ON dayOff.user_id = user.id 
+                WHERE user_id =:user_id 
+                AND MONTH(start) = MONTH(CURRENT_DATE) 
+                AND YEAR(start) = YEAR(CURRENT_DATE) 
+                AND status_id = 1 AND NOW() < start ORDER BY start;';
 
     $liste = Connexion::query($requete,['user_id'=> $_SESSION['user']['id']]);
 
@@ -38,7 +44,6 @@ function dayOffData_getFromId($dayOff_id)
     $requete = 'SELECT * FROM dayOff WHERE id=:dayOff_id';
 
     $liste = Connexion::query($requete,['dayOff_id'=> $dayOff_id]);
-
     return $liste[0];
 }
 
@@ -53,7 +58,6 @@ function dayOffData_delete($dayOff_id):bool{
 
     $requete='DELETE FROM dayOff WHERE id=:id';
 
-    // Execute la requete sur la base m2l grâce à la méthode query() prévu dans la classe Connexion
     return Connexion::exec($requete,['id'=>$dayOff_id]);
 }
 
@@ -61,7 +65,6 @@ function dayOffData_getAllFromUserId($user_id):?array{
 
     $requete='SELECT * FROM dayOff WHERE user_id =:user_id ORDER BY start';
 
-    // Execute la requete sur la base m2l grâce à la méthode query() prévu dans la classe Connexion
     return $liste=Connexion::query($requete,['user_id'=>$user_id]);
 }
 
@@ -74,7 +77,7 @@ function dayOffData_getDistinctYearsOnUser()
     return $liste;
 }
 
-function dayOffData_countStatuFromYear($status,$year,$user_id){
+function  dayOffData_countStatusFromYear($status,$year,$user_id){
     $requete = 'SELECT COUNT(*) FROM dayOff JOIN status ON dayOff.status_id = status.id WHERE year(start) =:year AND user_id =:user_id AND status.name =:status; ';
 
     $liste = Connexion::query($requete,['user_id'=>$user_id, 'year'=>$year, 'status'=>$status]);
@@ -82,7 +85,7 @@ function dayOffData_countStatuFromYear($status,$year,$user_id){
     return $liste[0]['COUNT(*)'];
 }
 
-function dayOffData_countStatu($status,$user_id){
+function dayOffData_countStatus($status,$user_id){
     $requete = 'SELECT COUNT(*) FROM dayOff JOIN status ON dayOff.status_id = status.id WHERE user_id =:user_id AND status.name =:status; ';
 
     $liste = Connexion::query($requete,['user_id'=>$user_id, 'status'=>$status]);
@@ -90,7 +93,7 @@ function dayOffData_countStatu($status,$user_id){
     return $liste[0]['COUNT(*)'];
 }
 
-function dayOffData_countAllStatuFromYear($year,$user_id){
+function dayOffData_countAllStatusFromYear($year,$user_id){
     $requete = 'SELECT COUNT(*) FROM dayOff JOIN status ON dayOff.status_id = status.id WHERE year(start) =:year AND user_id =:user_id ';
 
     $liste = Connexion::query($requete,['user_id'=>$user_id, 'year'=>$year]);
@@ -128,27 +131,36 @@ function dayOffData_updateStatus($dayOff_id,$status_id):array
 
 function dayOffData_getAll()
 {
-    $requete = 'SELECT * FROM dayOff';
+    $requete = 'SELECT * FROM dayOff ORDER BY start';
     $liste = Connexion::query($requete);
     return $liste;
 }
 
-function daysOffData_getValidateFromUserDepartementId(){
-//    $requete = 'SELECT * FROM dayOff
-//                JOIN user ON dayOff.user_id = user.id
-//                WHERE status_id=:status_id
-//                AND user.departement_id=:departement_id';
-//
-//    $liste = Connexion::query($requete,['status_id'=>$status_id, 'departement_id'=>$departement_id]);
-//    var_dump($liste); exit;
+function daysOffData_getAllValidateThisMonth()
+{
+    $requete = 'SELECT dayOff.id, dayOff.start, dayOff.end, dayOff.user_id,dayOff.reason_id, dayOff.status_id
+                FROM dayOff
+                WHERE status_id = 1
+                AND MONTH(start) = MONTH(CURRENT_DATE)
+                AND YEAR(start) = YEAR(CURRENT_DATE)
+                AND NOW() < start ORDER BY start;';
 
-    $requete = 'SELECT *
+    $liste = Connexion::query($requete);
+    return $liste;
+}
+
+function daysOffData_getValidateFromUserDepartementIdThisMonth(){
+    $requete = 'SELECT dayOff.id, dayOff.start, dayOff.end, dayOff.user_id,dayOff.reason_id, dayOff.status_id
                 FROM dayOff
                 JOIN user ON dayOff.user_id = user.id
                 WHERE user.departement_id=:departement_id
                 AND status_id = 1
+                AND MONTH(start) = MONTH(CURRENT_DATE)
+                AND YEAR(start) = YEAR(CURRENT_DATE)
                 AND NOW() < start ORDER BY start;';
 
     $liste = Connexion::query($requete,['departement_id'=> $_SESSION['user']['departement_id']]);
+
     return $liste;
 }
+

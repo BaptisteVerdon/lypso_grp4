@@ -9,7 +9,7 @@ include('../page/template/menu.php');
         <label>
             Veuillez sélectionner un statut de congé :
         </label>
-        <select name="status_id" id="status_id-selector" onchange="console.log(this)">
+        <select name="status_id" id="status_id-selector"  >
             <option value="all">Tous</option>
             <?php
             foreach ($status as $statu){

@@ -1,6 +1,5 @@
 <?php
 
-// Penser à mettre un validate.php dans www qui redirige vers cet index là !
 include('../config/AppConfig.php');
 include('../config/DbConfig.php');
 include('../kernel/Connexion.php');

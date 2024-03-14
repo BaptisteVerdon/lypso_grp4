@@ -48,6 +48,12 @@ function dayOffControl($action) {
         case 'refusal' :
             dayOffControl_refusalAction($_GET['dayOff_id']);
             break;
+        case 'directorIndex' :
+            dayOffControl_directorIndexAction();
+            break;
+        case 'directorUserSummary' :
+            dayOffControl_directorUserSummaryAction();
+            break;
             default :
             connexionControl_formAction();
             break;
@@ -62,29 +68,6 @@ function dayOffControl_createAction(){
     require '../page/dayOff/create.php';
 }
 
-function dayOffControl_editAction($dayOff_id)
-{
-    $titreOnglet="Lypso - Modifier";
-    $titrePage="Modifier le congé";
-    $reasons = reasonData_getAll();
-    $dayOff = dayOffData_getFromId($dayOff_id);
-    require '../page/dayOff/edit.php';
-}
-
-function dayOffControl_updateAction($dayOff_id)
-{
-    $dayOff = dayOffData_getFromId($dayOff_id);
-    $start = $_POST['start'];
-    $end = $_POST['end'];
-    $reason_id = $_POST['reason_id'];
-    $user_id = $_SESSION['user']['id'];
-
-    dayOffData_update($dayOff_id, $start, $end, $reason_id, $user_id);
-
-    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
-}
-
-
 function dayOffControl_storeAction(){
 
     $titreOnglet="Lypso - Accueil";
@@ -98,6 +81,25 @@ function dayOffControl_storeAction(){
 
     header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
 
+}
+function dayOffControl_daysOffIndexAction($user_id){
+    $titreOnglet="Lypso - Congés";
+    $titrePage = "Vos congés : Tous";
+    $status = statusData_getAll();
+    if (isset($_POST['status_id'])){
+        if ($_POST['status_id'] == 'all'){
+            $titrePage = "Vos congés : Tous";
+            $daysOff = dayOffData_getAllFromUserId($user_id);
+        }else{
+            $titrePage="Vos congés : ".statusData_getFromId($_POST['status_id'])['name'];
+            $id = $_POST['status_id'];
+            $daysOff = dayOffData_getFromStatusIdAndFromUserId($id,$user_id);
+        }
+    }else{
+        $daysOff = dayOffData_getAllFromUserId($user_id);
+    }
+
+    require ('../page/dayOff/daysOffIndex.php');
 }
 
 function dayOffControl_showAction($dayOff_id){
@@ -121,12 +123,31 @@ function dayOffControl_deleteConfirmAction($dayOff_id){
     require ('../page/dayOff/deleteConfirm.php');
 }
 
+function dayOffControl_editAction($dayOff_id)
+{
+    $titreOnglet="Lypso - Modifier";
+    $titrePage="Modifier le congé";
+    $reasons = reasonData_getAll();
+    $dayOff = dayOffData_getFromId($dayOff_id);
+    require '../page/dayOff/edit.php';
+}
+
+function dayOffControl_updateAction($dayOff_id)
+{
+    $dayOff = dayOffData_getFromId($dayOff_id);
+    $start = $_POST['start'];
+    $end = $_POST['end'];
+    $reason_id = $_POST['reason_id'];
+    $user_id = $_SESSION['user']['id'];
+
+    dayOffData_update($dayOff_id, $start, $end, $reason_id, $user_id);
+
+    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
+}
 function dayOffControl_askDeleteAction($dayOff_id){
-    $titreOnglet="Lypso - Accueil";
-    $titrePage="Accueil";
     dayOffData_updateStatusAskDelete($dayOff_id);
-    $daysOff = daysOffData_getValidateFromUserId();
-    require('../page/home.php');
+    header('Location:.?control=home');
+
 }
 
 function dayOffControl_createIsValidateAction(){
@@ -147,102 +168,6 @@ function dayOffControl_createIsValidateAction(){
     }
     require('../page/dayOff/create.php');
 }
-
-function dayOffControl_managerUserSummaryAction(){
-    $titreOnglet="Lypso - Recap";
-    $titrePage = "Utilisateurs : Tous";
-    $users = userData_getAllFromDepartementId($_SESSION['user']['departement_id']);
-    $chosenUserId = "all";
-    if (isset($_POST['user_id'])){
-        if ($_POST['user_id'] == 'all'){
-            $titrePage = "Utilisateurs : Tous";
-            $daysOff = dayOffData_getAll();
-        }else{
-            $titrePage="Utilisateur"." : ".userData_getNamesFromId($_POST['user_id'])['lastname']." ".userData_getNamesFromId($_POST['user_id'])['firstname'];
-            $chosenUserId = $_POST['user_id'];
-            $daysOff = dayOffData_getAll();
-        }
-    }else{
-        $daysOff = dayOffData_getAll();
-    }
-
-
-    require ('../page/dayOff/managerUserSummary.php');
-}
-function dayOffControl_managerIndexAction(){
-    $titreOnglet="Lypso - Manage";
-    $titrePage = "Congés : Tous";
-//    $status = [[statusData_getFromId(3)],[statusData_getFromId(5)]];
-    //TODO choisir entre tous les status possible pour manager v ou seulement certains ^
-    $status = statusData_getAll();
-    $chosenStatusId = "all";
-    if (isset($_POST['status_id'])){
-        if ($_POST['status_id'] == 'all'){
-            $titrePage = "Congés : Tous";
-            $daysOff = dayOffData_getAll();
-        }else{
-            $titrePage="Congés"." : ".statusData_getFromId($_POST['status_id'])['name'];
-            $chosenStatusId = $_POST['status_id'];
-            $daysOff = dayOffData_getAll();
-        }
-    }else{
-        $daysOff = dayOffData_getAll();
-    }
-
-    require ('../page/dayOff/managerIndex.php');
-}
-
-function dayOffControl_daysOffIndexAction($user_id){
-    $titreOnglet="Lypso - Congés";
-    $titrePage = "Congés : Tous";
-    $status = statusData_getAll();
-    if (isset($_POST['status_id'])){
-        if ($_POST['status_id'] == 'all'){
-            $titrePage = "Congés : Tous";
-            $daysOff = dayOffData_getAllFromUserId($user_id);
-        }else{
-            $titrePage="Congés"." : ".statusData_getFromId($_POST['status_id'])['name'];
-            $id = $_POST['status_id'];
-            $daysOff = dayOffData_getFromStatusIdAndFromUserId($id,$user_id);
-        }
-    }else{
-        $daysOff = dayOffData_getAllFromUserId($user_id);
-    }
-
-    require ('../page/dayOff/daysOffIndex.php');
-}
-function dayOffControl_validateConfirmAction($dayOff_id)
-{
-    $dayOff = dayOffData_getFromId($dayOff_id);
-    $status = statusData_getFromId($dayOff['status_id']);
-    if($status['name'] == "Demande de suppression"){
-        $newStatus = statusData_getFromName("Annulé");
-        var_dump($newStatus);
-    }elseif ($status['name'] == "En attente"){
-        $newStatus = statusData_getFromName("Validé");
-        var_dump($newStatus);
-    }
-    dayOffData_updateStatus($dayOff_id,$newStatus['id']);
-
-    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
-}
-function dayOffControl_refusalAction($dayOff_id)
-{
-    $dayOff = dayOffData_getFromId($dayOff_id);
-    $status = statusData_getFromId($dayOff['status_id']);
-    if($status['name'] == "Demande de suppression"){
-        $newStatus = statusData_getFromName("En attente");
-        var_dump($newStatus);
-    }elseif ($status['name'] == "En attente"){
-        $newStatus = statusData_getFromName("Refusé");
-        var_dump($newStatus);
-    }
-    dayOffData_updateStatus($dayOff_id,$newStatus['id']);
-
-    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
-
-}
-
 function dayOffControl_editIsValidateAction($dayOff_id){
     $start = $_POST['start'];
     $end = $_POST['end'];
@@ -263,5 +188,114 @@ function dayOffControl_editIsValidateAction($dayOff_id){
         $reasons = reasonData_getAll();
     }
     require('../page/dayOff/edit.php');
+}
+function dayOffControl_managerIndexAction(){
+    $titreOnglet="Lypso - Validation congés";
+    $titrePage = "Congés des employés : Tous";
+    $status = statusData_getAll();
+    $chosenStatusId = "all";
+    if (isset($_POST['status_id'])){
+        if ($_POST['status_id'] == 'all'){
+            $titrePage = "Congés : Tous";
+            $daysOff = dayOffData_getAll();
+        }else{
+            $titrePage="Congés : ".statusData_getFromId($_POST['status_id'])['name'];
+            $chosenStatusId = $_POST['status_id'];
+            $daysOff = dayOffData_getAll();
+        }
+    }else{
+        $daysOff = dayOffData_getAll();
+    }
 
+    require ('../page/dayOff/managerIndex.php');
+}
+function dayOffControl_managerUserSummaryAction(){
+    $titreOnglet="Lypso - Recap";
+    $titrePage = "Utilisateurs de votre département : Tous";
+    $users = userData_getAllFromDepartementId($_SESSION['user']['departement_id']);
+    $chosenUserId = "all";
+    if (isset($_POST['user_id'])){
+        if ($_POST['user_id'] == 'all'){
+            $titrePage = "Utilisateurs de votre département : Tous";
+            $daysOff = dayOffData_getAll();
+        }else{
+            $titrePage="Utilisateur de votre département : ".userData_getNamesFromId($_POST['user_id'])['lastname']." ".userData_getNamesFromId($_POST['user_id'])['firstname'];
+            $chosenUserId = $_POST['user_id'];
+            $daysOff = dayOffData_getAll();
+        }
+    }else{
+        $daysOff = dayOffData_getAll();
+    }
+
+
+    require ('../page/dayOff/managerUserSummary.php');
+}
+function dayOffControl_validateConfirmAction($dayOff_id)
+{
+    $dayOff = dayOffData_getFromId($dayOff_id);
+    $status = statusData_getFromId($dayOff['status_id']);
+    if($status['name'] == "Demande de suppression"){
+        $newStatus = statusData_getFromName("Annulé");
+    }elseif ($status['name'] == "En attente"){
+        $newStatus = statusData_getFromName("Validé");
+    }
+    dayOffData_updateStatus($dayOff_id,$newStatus['id']);
+
+    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
+}
+function dayOffControl_refusalAction($dayOff_id)
+{
+    $dayOff = dayOffData_getFromId($dayOff_id);
+    $status = statusData_getFromId($dayOff['status_id']);
+    if($status['name'] == "Demande de suppression"){
+        $newStatus = statusData_getFromName("En attente");
+    }elseif ($status['name'] == "En attente"){
+        $newStatus = statusData_getFromName("Refusé");
+    }
+    dayOffData_updateStatus($dayOff_id,$newStatus['id']);
+
+    header('Location:.?control=dayOff&action=show&dayOff_id='.$dayOff['id']);
+
+}
+function dayOffControl_directorIndexAction()
+{
+    $titreOnglet="Lypso - Validation congés";
+    $titrePage = "Congés des managers et directeurs : Tous";
+    $status = statusData_getAll();
+    $chosenStatusId = "all";
+    if (isset($_POST['status_id'])){
+        if ($_POST['status_id'] == 'all'){
+            $titrePage = "Congés des managers et directeurs : Tous";
+            $daysOff = dayOffData_getAll();
+        }else{
+            $titrePage="Congés des managers et directeurs : ".statusData_getFromId($_POST['status_id'])['name'];
+            $chosenStatusId = $_POST['status_id'];
+            $daysOff = dayOffData_getAll();
+        }
+    }else{
+        $daysOff = dayOffData_getAll();
+    }
+    require ('../page/dayOff/directorIndex.php');
+}
+function dayOffControl_directorUserSummaryAction()
+{
+    $titreOnglet="Lypso - Recap";
+    $titrePage = "Utilisateurs de l'entreprise : Tous";
+    $users = userData_getAll();
+    $chosenUserId = "all";
+    if (isset($_POST['user_id'])){
+        if ($_POST['user_id'] == 'all'){
+            $titrePage = "Utilisateurs de l'entreprise : Tous";
+            $daysOff = dayOffData_getAll();
+        }else{
+            $titrePage="Utilisateur de l'entreprise : ".userData_getNamesFromId($_POST['user_id'])['lastname']." ".userData_getNamesFromId($_POST['user_id'])['firstname'];
+            $chosenUserId = $_POST['user_id'];
+            $daysOff = dayOffData_getAll();
+        }
+    }else{
+        $daysOff = dayOffData_getAll();
+    }
+
+
+    require ('../page/dayOff/directorUserSummary.php');
 }
