@@ -9,18 +9,26 @@ include('../page/template/menu.php');
         Nom : <?= $_SESSION['user']['lastname']?> <br>
 
         Email : <?= $_SESSION['user']['email']?> <br>
-        Département : <?= userData_getNameDepartementFromId()?> <br>
+
         <?php
-        if (userData_getNameRoleFromId() == 'employee'){
+        if ( ! (userData_getNameRoleFromSessionUserId() == 'admin' )){
+            if ( ! (userData_getNameRoleFromSessionUserId() == 'director' )){
+                echo 'Département : '.userData_getNameDepartementFromId($_SESSION['user']['id']);
+            }
+        }
+        echo '<br>';
+        echo 'Rôle : ';
+        if (userData_getNameRoleFromSessionUserId() == 'employee'){
             echo 'Employé';
         }
-        if (userData_getNameRoleFromId() == 'admin'){
+        if (userData_getNameRoleFromSessionUserId() == 'admin'){
             echo 'Administrateur';
         }
-        if (userData_getNameRoleFromId() == 'manager'){
+        if (userData_getNameRoleFromSessionUserId() == 'manager'){
             echo 'Manager';
-        }else{
-            echo ' ';
+        }
+        if (userData_getNameRoleFromSessionUserId() == 'director'){
+            echo 'Directeur';
         }
         ?>
         <br>

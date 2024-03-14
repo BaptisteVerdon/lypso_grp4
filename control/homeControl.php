@@ -13,13 +13,18 @@ function homeControl($action) {
 function homeControl_defaultAction() {
 	$titreOnglet="Lypso - Accueil";
     $titrePage="Accueil";
-    if (userData_getNameRoleFromId() == 'employee'){
-        $daysOff = daysOffData_getValidateFromUserId();
+//    if (userData_getNameRoleFromSessionUserId() == 'employee'){
+//        $daysOff = daysOffData_getValidateFromUserIdThisMonth();
+//    }
+    if (userData_getNameRoleFromSessionUserId() == 'manager'){
+        $daysOff = daysOffData_getValidateFromUserDepartementIdThisMonth();
     }
-    if (userData_getNameRoleFromId() == 'manager'){
-        $daysOff = daysOffData_getValidateFromUserDepartementId();
-    }else{
+    elseif (userData_getNameRoleFromSessionUserId() == 'director'){
+        $daysOff = daysOffData_getAllValidateThisMonth();
+    }
+    else{
         $daysOff = [];
     }
+    $daysOffUser = daysOffData_getValidateFromUserIdThisMonth();
 	require '../page/home.php';
 }

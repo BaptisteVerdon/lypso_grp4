@@ -17,12 +17,17 @@
             echo '<li><a href="../www/index.php?control=dayOff&action=daysOffIndex&user_id='.$_SESSION['user']['id'].'">Vos congés</a></li>';
             echo '<li><a href="../www/index.php?control=dayOff&action=create">Prendre congés</a></li>';
             echo '<li><a href="../www/index.php?control=user&action=board&user_id='.$_SESSION['user']['id'].'">Tableau de bord</a></li>';
-            if (userData_getNameRoleFromId() == 'manager'){
+            if (userData_getNameRoleFromSessionUserId() == 'manager'){
                 echo '<br><br>';
-                    echo '<li><a href="../www/index.php?control=dayOff&action=managerIndex">Manage</a></li>';
-                    echo '<li><a href="../www/index.php?control=dayOff&action=managerUserSummary">Récap Utilisateur</a></li>';
+                echo '<li><a href="../www/index.php?control=dayOff&action=managerIndex">Validation congés</a></li>';
+                echo '<li><a href="../www/index.php?control=dayOff&action=managerUserSummary">Récap Utilisateur</a></li>';
 
-                }
+            }
+            if (userData_getNameRoleFromSessionUserId() == 'director'){
+                echo '<br><br>';
+                echo '<li><a href="../www/index.php?control=dayOff&action=directorIndex">Validation congés</a></li>';
+                echo '<li><a href="../www/index.php?control=dayOff&action=directorUserSummary">Récap Utilisateur</a></li>';
+            }
             ?>
 
         </ul>
