@@ -40,8 +40,6 @@ include('../page/template/menu.php');
         <?php
         foreach($daysOff as $dayOff){
             if (userData_getNameRoleFromUserId($dayOff['user_id']) == 'manager' or userData_getNameRoleFromUserId($dayOff['user_id']) == 'director'){
-//            if( ! (userData_getNameRoleFromUserId($dayOff['user_id']) == 'employee')){
-//                if ( ! (userData_getNameRoleFromUserId($dayOff['user_id']) == 'admin')){
                     if($chosenStatusId == "all" ){
                         echo '<tr>';
                         echo '<td class="text-center">'.userData_getAllFromId($dayOff['user_id'])['lastname'].'</td>';
@@ -80,7 +78,6 @@ include('../page/template/menu.php');
                         }
                         echo '</tr>';
                     }
-//                }
             }
 
         }

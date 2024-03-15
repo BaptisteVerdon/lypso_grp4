@@ -13,9 +13,6 @@ function homeControl($action) {
 function homeControl_defaultAction() {
 	$titreOnglet="Lypso - Accueil";
     $titrePage="Accueil";
-//    if (userData_getNameRoleFromSessionUserId() == 'employee'){
-//        $daysOff = daysOffData_getValidateFromUserIdThisMonth();
-//    }
     if (userData_getNameRoleFromSessionUserId() == 'manager'){
         $daysOff = daysOffData_getValidateFromUserDepartementIdThisMonth();
     }

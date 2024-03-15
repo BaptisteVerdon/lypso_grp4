@@ -77,12 +77,6 @@ include('../page/template/menu.php');
                 echo '<td class="text-center">'.dateUs2fr($dayOff['end']).'</td>';
                 echo '<td class="text-center">'.reasonData_getFromId($dayOff['reason_id'])['name'].'</td>';
                 echo '<td class="text-center">'.statusData_getFromId($dayOff['status_id'])['name'].'</td>';
-//                if (statusData_getFromId($dayOff['status_id'])['name'] == 'En attente' or statusData_getFromId($dayOff['status_id'])['name'] == 'Demande de suppression'){
-//                    if (! ($dayOff['user_id']==$_SESSION['user']['id'])){
-//                        echo '<td class="text-center">'.'<a href=".?control=dayOff&action=validateConfirm&dayOff_id='.$dayOff['id'].'">Valider</a>'.'</td>';
-//                        echo '<td class="text-center">'.'<a href=".?control=dayOff&action=refusal&dayOff_id='.$dayOff['id'].'">Refus</a>'.'</td>';
-//                    }
-//                }
                 echo '</tr>';
             }
             elseif($dayOff['user_id'] == $chosenUserId){
@@ -91,12 +85,6 @@ include('../page/template/menu.php');
                 echo '<td class="text-center">'.dateUs2fr($dayOff['end']).'</td>';
                 echo '<td class="text-center">'.reasonData_getFromId($dayOff['reason_id'])['name'].'</td>';
                 echo '<td class="text-center">'.statusData_getFromId($dayOff['status_id'])['name'].'</td>';
-//                if (statusData_getFromId($dayOff['status_id'])['name'] == 'En attente' or statusData_getFromId($dayOff['status_id'])['name'] == 'Demande de suppression'){
-//                    if (! ($dayOff['user_id']==$_SESSION['user']['id'])){
-//                        echo '<td class="text-center">'.'<a href=".?control=dayOff&action=validateConfirm&dayOff_id='.$dayOff['id'].'">Valider</a>'.'</td>';
-//                        echo '<td class="text-center">'.'<a href=".?control=dayOff&action=refusal&dayOff_id='.$dayOff['id'].'">Refus</a>'.'</td>';
-//                    }
-//                }
                 echo '</tr>';
             }
 
